@@ -17,7 +17,13 @@ describe Hotel::Date_Range do
       check_out = check_in 
 
       expect{ Hotel::Date_Range.new(check_in, check_out) }.must_raise ArgumentError
+    end
 
+    it "raises an ArgumentError when check out is before check in" do
+      check_in = Date.new(2018, 5, 05)
+      check_out = Date.new(2018, 5, 01)
+      
+      expect{ Hotel::Date_Range.new(check_in, check_out) }.must_raise ArgumentError
     end 
   end
 end 
