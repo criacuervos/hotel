@@ -27,6 +27,4 @@ describe Hotel::Reservation_Maker do
     it "returns a list of reservations by date" do
     end 
   end 
-
-
 end 

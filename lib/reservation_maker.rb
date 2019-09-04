@@ -18,8 +18,5 @@ module Hotel
     def reservations_by_date(check_in, check_out)
       return #an array of reservations
     end 
-
-
-    
   end
 end
