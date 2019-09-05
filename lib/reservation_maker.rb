@@ -36,5 +36,12 @@ module Hotel
       end 
       return all_reservations_by_date 
     end 
+
+    def available_rooms(check_in, check_out)
+      # start_date and end_date should be instances of class Date
+      return []
+    end 
+
+
   end
 end

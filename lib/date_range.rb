@@ -16,8 +16,10 @@ module Hotel
       end 
     end 
 
-    def date_overlap(reservation)
-      return true
+    def date_overlap?(reservation_a, reservation_b) #two arguments 
+
+
+      return true  
     end
 
     def include?(date)
@@ -32,7 +34,5 @@ module Hotel
       total_nights = check_out - check_in 
       return total_nights
     end 
-    #[code bloc]
-
   end 
 end 

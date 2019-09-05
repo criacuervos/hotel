@@ -37,7 +37,9 @@ describe Hotel::Reservation_Maker do
   
   describe "look up reservations by date" do
     before do
-      #Make reservations here
+      #Make reservations to check if they are properly looked up
+      #First two reservations include 8/5
+      #Third does not
       check_in1 = Date.parse("2020-08-04")
       check_out1 = check_in1 + 4
       check_in2 = Date.parse("2020-08-04")
@@ -65,9 +67,7 @@ describe Hotel::Reservation_Maker do
     end 
 
     it "returns an accurate list of all reservations by date" do
-      
       expect(@reservation_list).must_equal @accurate_dates
     end 
-
   end 
 end 
