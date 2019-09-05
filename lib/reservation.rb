@@ -3,6 +3,7 @@ require 'date'
 module Hotel
   class Reservation
     attr_reader :check_in, :check_out, :room
+    attr_accessor :date_range
     #[code bloc]
     def initialize(check_in, check_out, room = nil)
       @check_in = check_in
@@ -10,6 +11,8 @@ module Hotel
       if room
         @room = room
       end 
+      @date_range = Hotel::Date_Range.new(check_in, check_out)
+
     end
 
     def cost

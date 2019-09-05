@@ -1,4 +1,5 @@
 require_relative 'reservation'
+require_relative 'reservation_maker'
 
 module Hotel
   class Date_Range  
@@ -20,6 +21,11 @@ module Hotel
     end
 
     def include?(date)
+      if date >= @check_in && date < @check_out 
+        return true 
+      else 
+        return false
+      end 
     end 
 
     def nights

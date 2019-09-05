@@ -1,22 +1,40 @@
 require_relative 'reservation'
+require_relative 'date_range'
 
 module Hotel
   class Reservation_Maker
-    attr_reader :rooms
+    attr_reader :rooms 
+    attr_accessor :reservations
     
     def initialize
       rooms = Array(1..20)
       @rooms = rooms
+      @reservations = []
     end 
 
     def reserve_room(check_in, check_out)
       i = 0
       room = rooms[i+1]
-      return Hotel::Reservation.new(check_in, check_out, room)
+      reservation = Hotel::Reservation.new(check_in, check_out, room)
+      return reservation 
     end
 
-    def reservations_by_date(check_in, check_out)
-      return #an array of reservations
+    def add_reservation(reservation)
+      @reservations << reservation
+      return @reservations
+    end 
+
+    def reservations_lookup(date)
+      all_reservations_by_date = []
+      #you can compare dates with < / > 
+      #you can pass in a date and a reservation should be able to tell if it overlaps/contains that date 
+      #.include? as a method in reservation class
+      @reservations.each do |reservation|
+        if reservation.date_range.include?(date)
+          all_reservations_by_date << reservation
+        end 
+      end 
+      return all_reservations_by_date 
     end 
   end
 end

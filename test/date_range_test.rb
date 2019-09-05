@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 
 describe Hotel::Date_Range do
+
   describe 'initialize' do
     it "can be initialized with two dates" do
       check_in = Date.new(2018, 9, 03)
@@ -26,4 +27,16 @@ describe Hotel::Date_Range do
       expect{ Hotel::Date_Range.new(check_in, check_out) }.must_raise ArgumentError
     end 
   end
+
+  describe "include?" do
+    it "checks whether a date is included in a Reservation" do
+      check_in = Date.new(2019, 2, 03)
+      check_out = check_in + 3
+      date = Date.new(2019, 2, 04)
+      reservation = Hotel::Date_Range.new(check_in, check_out)
+      
+      expect(reservation.include?(date)).must_equal true
+    end 
+  end 
+
 end 
