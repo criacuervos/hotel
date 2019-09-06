@@ -42,16 +42,18 @@ describe Hotel::Date_Range do
   describe "overlap?" do
     before do
       check_in = Date.new(2019, 04, 23)
-      check_out = check_out + 3
+      check_out = check_in + 3
 
-      @range = Hotel::DateRange.new(check_in, check_out)
+      @range = Hotel::Date_Range.new(check_in, check_out)
     end
 
     it "returns true for the same range" do
       check_in = @range.check_in
       check_out = @range.check_out
-      test_range = Hotel::DateRange.new(check_in, check_out)
+      
+      test_range = Hotel::Date_Range.new(check_in, check_out)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.date_overlap?(test_range)).must_equal true
     end
+  end 
 end 

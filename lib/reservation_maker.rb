@@ -15,7 +15,8 @@ module Hotel
     def reserve_room(check_in, check_out)
       i = 0
       room = rooms[i+1]
-      reservation = Hotel::Reservation.new(check_in, check_out, room)
+      date_range = Hotel::Date_Range.new(check_in, check_out)
+      reservation = Hotel::Reservation.new(date_range, room)
       return reservation 
     end
 
