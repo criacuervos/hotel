@@ -39,6 +39,16 @@ describe Hotel::Date_Range do
     end 
   end 
 
+  describe "nights" do
+    it "returns the correct number of nights" do
+      check_in = Date.new(2019, 10, 10)
+      check_out = check_in + 5
+      range = Hotel::Date_Range.new(check_in, check_out)
+
+      expect(range.nights).must_equal 5
+    end
+  end 
+
   describe "overlap?" do
     before do
       check_in = Date.new(2019, 04, 23)
@@ -56,9 +66,17 @@ describe Hotel::Date_Range do
       expect(@range.date_overlap?(test_range)).must_equal true
     end
 
-    it "checks whether range is contained inside another" do
+    it "checks whether range is containing other" do
       check_in = Date.new(2019, 04, 24)
       check_out = check_in + 1
+
+      test_range = Hotel::Date_Range.new(check_in, check_out)
+      expect(@range.date_overlap?(test_range)).must_equal true 
+    end 
+
+    it "returns true if range is contained in other" do 
+      check_in = Date.new(2019, 04, 20)
+      check_out = check_in + 10
 
       test_range = Hotel::Date_Range.new(check_in, check_out)
       expect(@range.date_overlap?(test_range)).must_equal true 
@@ -72,7 +90,7 @@ describe Hotel::Date_Range do
       expect(@range.date_overlap?(test_range)).must_equal true 
     end 
 
-    it "returns false for a range starting on the end_date date" do
+    it "returns false for a range starting on the check_out date" do
       check_in = @range.check_out
       check_out = check_in + 3
 
@@ -80,18 +98,28 @@ describe Hotel::Date_Range do
       expect(@range.date_overlap?(test_range)).must_equal false
     end 
 
-    xit "returns false for a range ending on the check_in date" do
-      check_in = Date.new(2019, 04, 20)
-      check_out = check_in + 3
+    it "returns false for a range ending on the check_in date" do
+      check_in = Date.new(2019, 04, 18)
+      check_out = @range.check_in
       
       test_range = Hotel::Date_Range.new(check_in, check_out)
       expect(@range.date_overlap?(test_range)).must_equal false
     end 
 
     it "returns false for a range completely before other" do 
+      check_in = Date.new(2019, 01, 01)
+      check_out = check_in + 5
+
+      test_range = Hotel::Date_Range.new(check_in, check_out)
+      expect(@range.date_overlap?(test_range)).must_equal false
     end 
 
     it "returns false for a date completely after" do
+      check_in = Date.new(2019, 12, 30)
+      check_out = check_in + 5
+
+      test_range = Hotel::Date_Range.new(check_in, check_out)
+      expect(@range.date_overlap?(test_range)).must_equal false
     end 
   end 
 end 
