@@ -16,11 +16,11 @@ module Hotel
       end 
     end 
     
-    def date_overlap?(reservation) 
-      return (check_in...check_out).cover?(reservation.check_in) || 
-      (check_in...check_out).cover?(reservation.check_out) || 
-      (reservation.check_in...reservation.check_out).cover?(check_in) || 
-      (check_in == reservation.check_in && @check_out == reservation.check_out)
+    def date_overlap?(other) 
+      return (check_in...check_out).cover?(other.check_in) || 
+      (check_in...check_out).cover?(other.check_out) || 
+      (other.check_in...other.check_out).cover?(check_in) || 
+      (other.check_in...other.check_out) == (check_in...check_out)
       #refactor to get some variable names goin to check against 
     end
     
