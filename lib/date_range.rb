@@ -17,6 +17,8 @@ module Hotel
     end 
     
     def date_overlap?(other) 
+      #This is not working in cases where other's checkout date is the same as @dates check in date
+      #I could explicitly state that if any check_out is EQUAL to any check in, then it is not an overlap
       return (check_in...check_out).cover?(other.check_in) || 
       (check_in...check_out).cover?(other.check_out) || 
       (other.check_in...other.check_out).cover?(check_in) || 

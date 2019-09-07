@@ -12,12 +12,13 @@ module Hotel
       @reservations = []
     end 
 
+      #in reserve room, we just call available rooms method and pick an available room from the array
     def reserve_room(check_in, check_out)
       date_range = Hotel::Date_Range.new(check_in, check_out)
 
-      available_rooms()
-      #call available rooms method and 
-      #now just pick an available room from the array 
+      avail_rooms = available_rooms(date_range)
+      available_room = avail_rooms[0]
+ 
       reservation = Hotel::Reservation.new(date_range, available_room)
       return reservation 
     end
@@ -40,7 +41,7 @@ module Hotel
       return all_reservations_by_date 
     end 
 
-    def available_rooms(check_in, check_out)
+    def available_rooms(date_range)
       #go through reservations and find all reservations that overlap with passed in date range
       #go through rooms and find a room not included in those overlapping reservations
       unavail_rooms = []

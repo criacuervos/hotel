@@ -56,17 +56,16 @@ describe Hotel::Date_Range do
       expect(@range.date_overlap?(test_range)).must_equal true
     end
 
-    it "returns true if a reservation is contained inside another" do
+    it "checks whether range is contained inside another" do
       check_in = Date.new(2019, 04, 24)
       check_out = check_in + 1
 
       test_range = Hotel::Date_Range.new(check_in, check_out)
       expect(@range.date_overlap?(test_range)).must_equal true 
-      expect(test_range.date_overlap?(@range)).must_equal true
     end 
 
-    it "checks if a reservation starts before another ends" do
-      check_in = Date.new(2019, 04, 27)
+    it "checks whether reservation starts before another ends" do
+      check_in = Date.new(2019, 04, 25)
       check_out = check_in + 5
 
       test_range = Hotel::Date_Range.new(check_in, check_out)
@@ -81,6 +80,18 @@ describe Hotel::Date_Range do
       expect(@range.date_overlap?(test_range)).must_equal false
     end 
 
+    xit "returns false for a range ending on the check_in date" do
+      check_in = Date.new(2019, 04, 20)
+      check_out = check_in + 3
+      
+      test_range = Hotel::Date_Range.new(check_in, check_out)
+      expect(@range.date_overlap?(test_range)).must_equal false
+    end 
 
+    it "returns false for a range completely before other" do 
+    end 
+
+    it "returns false for a date completely after" do
+    end 
   end 
 end 
