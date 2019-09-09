@@ -11,8 +11,8 @@ module Hotel
 
       @date_range = date_range
 
-      # total_nights = (@date_range.check_out) - (@date_range.check_in) - 1
-      # @cost = total_nights * 150
+      total_nights = (@date_range.check_out) - (@date_range.check_in) - 1
+      @cost = total_nights * 150
       if block_rooms 
         if block_rooms.length > 5 || block_rooms.length < 1
           raise ReservationError, "You can only have up to 5 rooms in a block"

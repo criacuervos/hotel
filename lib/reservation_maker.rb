@@ -1,24 +1,26 @@
 require_relative 'reservation'
 require_relative 'date_range'
 require_relative 'block'
+class ReservationError < StandardError
+end
 
 module Hotel
   class Reservation_Maker
     attr_reader :rooms 
-    attr_accessor :reservations, :block_reservations
+    attr_accessor :reservations, :blocks
     
     def initialize
       rooms = Array(1..20)
       @rooms = rooms
       @reservations = []
-      @block_reservations = []
+      @blocks = []
     end 
 
     def reserve_from_block(check_in, check_out)
       date_range = Hotel::Date_Range.new(check_in, check_out)
-      @block_reservations.each do |block|
-        if !block.date_range.include?(date_range) 
-          raise Reservation_Maker.new("Date range is not included in existing block!")
+      @blocks.each do |block|
+        if !block.date_range.include?(check_in) 
+          raise ReservationError, "Date range is not included in existing block!"
         end 
       end
       avail_rooms = available_rooms(date_range)
@@ -26,6 +28,7 @@ module Hotel
 
       block_reference = Hotel::Block.new(date_range)
       block_reservation = Hotel::Reservation.new(date_range, available_room, block_reference)
+      add_reservation(block_reservation)
       return block_reservation 
     end 
 
@@ -38,7 +41,7 @@ module Hotel
         check_out = reservation.check_out
         other = Hotel::Date_Range.new(check_in, check_out)
         if date_range.date_overlap?(other)
-          raise Reservation_Maker.new("Reservation overlaps with existing reservation")
+          raise ReservationError.new("Reservation overlaps with existing reservation")
         end 
       end 
       avail_rooms = available_rooms(date_range)
@@ -54,9 +57,9 @@ module Hotel
       return reservations
     end 
 
-    def add_block(block_reservation)
-      block_reservations << block_reservation
-      return block_reservations
+    def add_block(block)
+      blocks << block
+      return blocks
     end 
 
     def reservations_lookup(date)
