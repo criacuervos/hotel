@@ -1,25 +1,51 @@
 require_relative 'reservation'
 require_relative 'date_range'
+require_relative 'block'
 
 module Hotel
   class Reservation_Maker
     attr_reader :rooms 
-    attr_accessor :reservations
+    attr_accessor :reservations, :block_reservations
     
     def initialize
       rooms = Array(1..20)
       @rooms = rooms
       @reservations = []
+      @block_reservations = []
+    end 
+
+    def reserve_from_block(check_in, check_out)
+      date_range = Hotel::Date_Range.new(check_in, check_out)
+      @block_reservations.each do |block|
+        if !block.date_range.include?(date_range) 
+          raise Reservation_Maker.new("Date range is not included in existing block!")
+        end 
+      end
+      avail_rooms = available_rooms(date_range)
+      available_room = avail_rooms[0]
+
+      block_reference = Hotel::Block.new(date_range)
+      block_reservation = Hotel::Reservation.new(date_range, available_room, block_reference)
+      return block_reservation 
     end 
 
       #in reserve room, we just call available rooms method and pick an available room from the array
     def reserve_room(check_in, check_out)
       date_range = Hotel::Date_Range.new(check_in, check_out)
 
+      @reservations.each do |reservation|
+        check_in = reservation.check_in
+        check_out = reservation.check_out
+        other = Hotel::Date_Range.new(check_in, check_out)
+        if date_range.date_overlap?(other)
+          raise Reservation_Maker.new("Reservation overlaps with existing reservation")
+        end 
+      end 
       avail_rooms = available_rooms(date_range)
       available_room = avail_rooms[0]
  
       reservation = Hotel::Reservation.new(date_range, available_room)
+      add_reservation(reservation)
       return reservation 
     end
 
@@ -28,11 +54,13 @@ module Hotel
       return reservations
     end 
 
+    def add_block(block_reservation)
+      block_reservations << block_reservation
+      return block_reservations
+    end 
+
     def reservations_lookup(date)
       all_reservations_by_date = []
-      #you can compare dates with < / > 
-      #you can pass in a date and a reservation should be able to tell if it overlaps/contains that date 
-      #.include? as a method in reservation class
       @reservations.each do |reservation|
         if reservation.date_range.include?(date)
           all_reservations_by_date << reservation
@@ -42,8 +70,6 @@ module Hotel
     end 
 
     def available_rooms(date_range)
-      #go through reservations and find all reservations that overlap with passed in date range
-      #go through rooms and find a room not included in those overlapping reservations
       unavail_rooms = []
 
       reservations.each do |reservation|
@@ -53,8 +79,6 @@ module Hotel
       end 
 
       avail_rooms = [] 
-      #Choose a room not contained in unavailable rooms 
-      #If its NOT included then i DO want it 
       rooms.each do |room|
         unless unavail_rooms.include?(room)
           avail_rooms << room
@@ -62,6 +86,5 @@ module Hotel
       end 
       return avail_rooms 
     end 
-
   end
 end

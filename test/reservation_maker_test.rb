@@ -57,7 +57,7 @@ describe Hotel::Reservation_Maker do
 
         room_list = @reservation_maker.available_rooms(date_range)
         expect(room_list).must_be_kind_of Array
-      end 
+      end
     end 
   end 
 end 
