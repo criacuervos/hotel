@@ -18,21 +18,24 @@ module Hotel
 
     def reserve_from_block(check_in, check_out)
       date_range = Hotel::Date_Range.new(check_in, check_out)
-      @blocks.each do |block|
-        if !block.date_range.include?(check_in) 
-          raise ReservationError, "Date range is not included in existing block!"
-        end 
-      end
-      avail_rooms = available_rooms(date_range)
-      available_room = avail_rooms[0]
+      block = block_lookup(date_range)
+      rooms = available_rooms(date_range)
+      room = rooms[0]
 
-      block_reference = Hotel::Block.new(date_range)
-      block_reservation = Hotel::Reservation.new(date_range, available_room, block_reference)
+      if room == nil
+        raise ReservationError.new("There are no available rooms for the chosen block")
+      end 
+
+      block_reference = Hotel::Block.new(check_in, check_out)
+      block_reservation = Hotel::Reservation.new(check_in, check_out, room, block_reference)
       add_reservation(block_reservation)
       return block_reservation 
     end 
 
-      #in reserve room, we just call available rooms method and pick an available room from the array
+    def block_lookup(date_range)
+      @blocks.find { |block| block.date_range == date_range }
+    end 
+
     def reserve_room(check_in, check_out)
       date_range = Hotel::Date_Range.new(check_in, check_out)
 

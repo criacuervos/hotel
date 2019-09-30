@@ -40,3 +40,30 @@ Does total_price directly manipulate the instance variables of other classes?
 
 9) Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
   Both implementations are creating a new instance of ShoppingCart in the Order class. There is some coupling which exists in both. Implementation A is more loosely coupled. It is only calling on ShoppingCart so that it can iterate through all of the entries, and find the sum. However, in Implementation B, the total_price method is calling a whole method from ShoppingCart as well. Then, in that price method, it is calling CartEntry's price method. The dependency there runs more deep. 
+
+
+------------------------------------------------
+
+
+  Responsibility of each class:
+    -Date_Range is responsible for creating objects that know a check in and check out date, and ensuring that two dates don't overlap.
+    -Reservation class is in charge of knowing its date range, room number, and block.
+    -Block class is in charge of knowing its date range, and the room numbers it consists of, and cost.
+    -ReservationMaker is in charge of handling reservation and block making, and storing a list of available rooms.
+
+
+Describe what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+
+  For this activity, I worked on updating my Reservation and Block classes' instance methods. It takes an object of date range, which is fine for me to understand and use, but means that it is tightly coupled. and that to use and understand it in tests might be abstract for other people. In order to test the Reservation & Block class however, you have to initialize an object of Date Range as well. 
+  
+  I figured it would be easiest and best practice for anybody using my code to not have to do that. So I updated Reservation & Block to take in a check in and check out date as a unix timestamp rather than depending on creating a date range object.
+
+
+  Something else I refactored was the constructor in the Block class so that it would not need an instance of ReservationMaker. I used that to find and assign available rooms for the Block object. I decided that it isn't the responsibility of that class to know which rooms were available, but just a max limit in how many rooms in can have.
+
+  I also updated the reserve_from_block method in the ReservationMaker class. I added a helper method (block_lookup) that would search through blocks, and is then utilized in reserve_from_block.
+
+  There is definitely still more I could have done, but I see pretty clearly in what ways loosening up coupling really helps make the code more universal and therefore easily modifiable in future situations.
+
+
+
